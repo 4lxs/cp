@@ -1,7 +1,7 @@
 ///
-/// name: $(PROBLEM)
-/// link: $(URL)
-/// start: $(DATE)
+/// name: J. Jeopardy of Dropped Balls
+/// link: https://codeforces.com/problemset/problem/1575/J
+/// start: Sun Mar  3 18:33:45 2024
 ///
 
 #include <bits/stdc++.h>
@@ -66,5 +66,30 @@ signed main() {
 
 
 void solve() {
+  rdi(height, width, nballs);
+  vvi grid(height, vi(width, 0));
+  for (auto & i : grid)
+    for (auto & j : i) cin >> j;
 
+  rdvin(balls, nballs);
+  dbg(grid);
+
+  for (auto ballcol : balls) {
+    int x = ballcol - 1, y = 0;
+    while (true) {
+      int tmp = grid[y][x];
+      dbg(x, y, grid[y][x]);
+      grid[y][x] = 2;
+      switch (tmp) {
+        case 1: x++; break;
+        case 2: y++; break;
+        case 3: x--; break;
+      }
+      dbg(x, y);
+      if (y == height) {
+        break;
+      }
+    }
+    cout << x + 1 << endl;
+  }
 }

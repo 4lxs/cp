@@ -1,7 +1,7 @@
 ///
-/// name: $(PROBLEM)
-/// link: $(URL)
-/// start: $(DATE)
+/// name: C. Rudolf and the Ugly String
+/// link: https://codeforces.com/contest/1941/problem/C
+/// start: Mon Mar 11 15:57:04 2024
 ///
 
 #include <bits/stdc++.h>
@@ -57,7 +57,7 @@ void solve();
 signed main() {
   setIO("");
   int tc = 1;
-  // cin >> tc;
+  cin >> tc;
   for (int t = 1; t <= tc; t++) {
     dbg("Case #", t, ":");
     solve();
@@ -66,5 +66,23 @@ signed main() {
 
 
 void solve() {
+  rdi(n);
+  rds(s);
 
+  int cntpie = 0;
+  for (int pos = s.find("pie"); pos != string::npos; pos = s.find("pie", pos + 1)) {
+    cntpie++;
+  }
+
+  int cntmap = 0;
+  for (int pos = s.find("map"); pos != string::npos; pos = s.find("map", pos + 1)) {
+    cntmap++;
+  }
+
+  int cntmapie = 0;
+  for (int pos = s.find("mapie"); pos != string::npos; pos = s.find("mapie", pos + 1)) {
+    cntmapie++;
+  }
+
+  cout << cntpie + cntmap - cntmapie << endl;
 }

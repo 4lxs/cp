@@ -1,7 +1,7 @@
 ///
-/// name: $(PROBLEM)
-/// link: $(URL)
-/// start: $(DATE)
+/// name: F - #(subset sum = K) with Add and Erase
+/// link: https://atcoder.jp/contests/abc321/tasks/abc321_f
+/// start: Sat Mar  2 13:31:02 2024
 ///
 
 #include <bits/stdc++.h>
@@ -66,5 +66,18 @@ signed main() {
 
 
 void solve() {
-
+  rdi(q, k);
+  map<int, int> box;
+  map<int, int> memo;
+  for (int i = 0; i < q; i++) {
+    cin.ignore();
+    rdc(sign);
+    rdi(x);
+    if (sign == '+') {
+      box[x]++;
+    }
+    else {
+      box[x]--;
+    }
+  }
 }

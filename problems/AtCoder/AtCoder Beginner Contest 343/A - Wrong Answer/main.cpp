@@ -1,7 +1,7 @@
 ///
-/// name: $(PROBLEM)
-/// link: $(URL)
-/// start: $(DATE)
+/// name: A - Wrong Answer
+/// link: https://atcoder.jp/contests/abc343/tasks/abc343_a
+/// start: Sat Mar  2 13:52:53 2024
 ///
 
 #include <bits/stdc++.h>
@@ -66,5 +66,9 @@ signed main() {
 
 
 void solve() {
-
+  rdi(a, b);
+  int out = 0;
+  if (a == out || b == out) out++;
+  if (a == out || b == out) out++;
+  cout << out << endl;
 }

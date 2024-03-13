@@ -1,7 +1,7 @@
 ///
-/// name: $(PROBLEM)
-/// link: $(URL)
-/// start: $(DATE)
+/// name: C. Sequence Pair Weight
+/// link: https://codeforces.com/problemset/problem/1527/C
+/// start: Thu Mar  7 19:44:11 2024
 ///
 
 #include <bits/stdc++.h>
@@ -57,7 +57,7 @@ void solve();
 signed main() {
   setIO("");
   int tc = 1;
-  // cin >> tc;
+  cin >> tc;
   for (int t = 1; t <= tc; t++) {
     dbg("Case #", t, ":");
     solve();
@@ -66,5 +66,29 @@ signed main() {
 
 
 void solve() {
+  map<int, int> nums;
+  rdi(n);
+  rdvin(arr, n);
+  for (auto i : arr) {
+    nums[i]++;
+  }
+  int weightarr = 0;
+  for (auto [num, cntnum] : nums) {
+    for (int i = 1; i < cntnum; i++) {
+      weightarr += i;
+    }
+  }
+  dbg(weightarr);
+  int finalweight = weightarr;
+  int storeweightarr = weightarr;
+  map<int,int> save = nums;
 
+  for (auto dnum : arr) {
+    int & n = nums[dnum];
+    weightarr -= --n;
+    dbg(dnum, n);
+    finalweight += weightarr;
+  }
+
+  cout << finalweight << endl;
 }

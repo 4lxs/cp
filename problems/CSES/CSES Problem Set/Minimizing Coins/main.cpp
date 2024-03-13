@@ -1,7 +1,7 @@
 ///
-/// name: $(PROBLEM)
-/// link: $(URL)
-/// start: $(DATE)
+/// name: Minimizing Coins
+/// link: https://cses.fi/problemset/task/1634
+/// start: Sun Mar  3 11:35:00 2024
 ///
 
 #include <bits/stdc++.h>
@@ -64,7 +64,38 @@ signed main() {
   }
 }
 
+int calc2(int used, int need, int ncoins, vvi & memo, vi & coins) {
+  // dbg(used, need);
+  if (need < 0) return -1;
+  if (need == 0) return 0;
+  if (used == ncoins) return -1;
+  if (memo[used][need] != -2) return memo[used][need];
+
+  int out = -1;
+  int tmp = calc2( used, need - coins[used], ncoins, memo, coins);
+  int tmp2 = calc2( used + 1, need, ncoins, memo, coins);
+  if (tmp != -1 && tmp2 != -1) out = min(1 + tmp, tmp2);
+  else if (tmp != -1) out = tmp + 1;
+  else if (tmp2 != -1) out = tmp2;
+  // dbg(used, need, out);
+  return memo[used][need] = out;
+}
 
 void solve() {
+  rdi(ncoins, neededsum);
+  rdvin(coins, ncoins);
 
+  vi memo(neededsum + 1);
+  memo[0] = 0;
+  for (int i = 1; i <= neededsum; i++) {
+    int nmin = intmax - 1;
+    for (auto coin : coins) {
+      if (i - coin < 0) continue;
+      nmin = min(nmin, 1 + memo[i-coin]);
+    }
+    memo[i] = nmin;
+    // dbg(i, memo[i]);
+  }
+
+  cout << (memo[neededsum] == intmax - 1 ? -1 : memo[neededsum]) << endl;
 }

@@ -1,7 +1,7 @@
 ///
-/// name: $(PROBLEM)
-/// link: $(URL)
-/// start: $(DATE)
+/// name: A. Rudolf and the Ticket
+/// link: https://codeforces.com/contest/1941/problem/0
+/// start: Mon Mar 11 15:37:46 2024
 ///
 
 #include <bits/stdc++.h>
@@ -57,7 +57,7 @@ void solve();
 signed main() {
   setIO("");
   int tc = 1;
-  // cin >> tc;
+  cin >> tc;
   for (int t = 1; t <= tc; t++) {
     dbg("Case #", t, ":");
     solve();
@@ -66,5 +66,23 @@ signed main() {
 
 
 void solve() {
+  rdi(nleft, nright, maxsum);
+  rdvin(left, nleft);
+  rdvin(right, nright);
 
+  sort(all(left));
+  sort(all(right));
+  int r = nright-1;
+  int cnt = 0;
+  for (int l = 0; l < nleft; l++) {
+    dbg(left[l]);
+    for (; r >= 0; r--) {
+      if (right[r] + left[l] > maxsum) continue;
+      dbg(right[r]);
+      cnt += r + 1;
+      break;
+    }
+  }
+
+  cout << cnt << endl;
 }

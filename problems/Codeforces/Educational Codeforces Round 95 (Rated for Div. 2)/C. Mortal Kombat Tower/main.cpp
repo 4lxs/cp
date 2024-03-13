@@ -1,7 +1,7 @@
 ///
-/// name: $(PROBLEM)
-/// link: $(URL)
-/// start: $(DATE)
+/// name: C. Mortal Kombat Tower
+/// link: https://codeforces.com/problemset/problem/1418/C
+/// start: Tue Mar  5 20:09:18 2024
 ///
 
 #include <bits/stdc++.h>
@@ -57,7 +57,7 @@ void solve();
 signed main() {
   setIO("");
   int tc = 1;
-  // cin >> tc;
+  cin >> tc;
   for (int t = 1; t <= tc; t++) {
     dbg("Case #", t, ":");
     solve();
@@ -66,5 +66,16 @@ signed main() {
 
 
 void solve() {
+  rdi(n);
+  rdvin(a, n);
 
+  bool yt = false;
+  int out = 0;
+  for (int i = 0; i < n; i++, yt = !yt) {
+    if (!yt && a[i] == 1) out++;
+    if (i + 1 >= n) break;
+    if (yt && a[i+1] == 1) i++;
+    if (!yt && a[i+1] == 0) i++;
+  }
+  cout << out << endl;
 }

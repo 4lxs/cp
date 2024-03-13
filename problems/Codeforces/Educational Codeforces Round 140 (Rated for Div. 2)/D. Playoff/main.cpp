@@ -1,7 +1,7 @@
 ///
-/// name: $(PROBLEM)
-/// link: $(URL)
-/// start: $(DATE)
+/// name: D. Playoff
+/// link: https://codeforces.com/problemset/problem/1767/D
+/// start: Wed Mar  6 14:38:10 2024
 ///
 
 #include <bits/stdc++.h>
@@ -66,5 +66,24 @@ signed main() {
 
 
 void solve() {
+  rdi(n);
+  string s;
+  cin >> s;
 
+  int lx = 1, rx = 1;
+  int l = 1, r = pow(2, n);
+  for (char c : s) {
+    if (c == '1') {
+      l += lx;
+      lx *= 2;
+    } else {
+      r -= rx;
+      rx *= 2;
+    }
+  }
+
+  for (int i = l; i <= r; i++) {
+    cout << i << " ";
+  }
+  cout << endl;
 }

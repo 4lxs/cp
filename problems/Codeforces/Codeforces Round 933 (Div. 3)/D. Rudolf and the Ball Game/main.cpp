@@ -1,7 +1,7 @@
 ///
-/// name: $(PROBLEM)
-/// link: $(URL)
-/// start: $(DATE)
+/// name: D. Rudolf and the Ball Game
+/// link: https://codeforces.com/contest/1941/problem/D
+/// start: Mon Mar 11 16:13:41 2024
 ///
 
 #include <bits/stdc++.h>
@@ -57,7 +57,7 @@ void solve();
 signed main() {
   setIO("");
   int tc = 1;
-  // cin >> tc;
+  cin >> tc;
   for (int t = 1; t <= tc; t++) {
     dbg("Case #", t, ":");
     solve();
@@ -66,5 +66,38 @@ signed main() {
 
 
 void solve() {
+  rdi(np, nt, p1);
+  vi throws(nt);
+  vc throwdir(nt);
+  for (int i = 0; i < nt; i++) {
+    cin >> throws[i] >> throwdir[i];
+  }
+  vb canreach(np, false), nextturn(np, false);
+  canreach[p1-1] = true;
 
+  for (int i = 0; i < nt; i++) {
+    dbg(i);
+    for (int p = 0; p < np; p++) {
+      if (canreach[p]) {
+        if (throwdir[i] == '0' || throwdir[i] == '?') {
+          dbg((p + throws[i]) % np);
+          nextturn[(p + throws[i]) % np] = true;
+        }
+        if (throwdir[i] == '1' || throwdir[i] == '?') {
+          dbg((p - throws[i] + np) % np);
+          nextturn[(p - throws[i] + np) % np] = true;
+        }
+      }
+    }
+    canreach = nextturn;
+    nextturn.assign(np, false);
+  }
+
+  cout << count(all(canreach), true) << endl;
+  for (int p = 0; p < np; p++) {
+    if (canreach[p]) {
+      cout << p+1 << ' ';
+    }
+  }
+  cout << endl;
 }

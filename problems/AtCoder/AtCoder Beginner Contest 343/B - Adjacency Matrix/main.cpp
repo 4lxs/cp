@@ -1,7 +1,7 @@
 ///
-/// name: $(PROBLEM)
-/// link: $(URL)
-/// start: $(DATE)
+/// name: B - Adjacency Matrix
+/// link: https://atcoder.jp/contests/abc343/tasks/abc343_b
+/// start: Sat Mar  2 13:56:26 2024
 ///
 
 #include <bits/stdc++.h>
@@ -66,5 +66,14 @@ signed main() {
 
 
 void solve() {
-
+  rdi(n);
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+      rdi(x);
+      if (x == 1) {
+        cout << j + 1 << " ";
+      }
+    }
+    cout << endl;
+  }
 }

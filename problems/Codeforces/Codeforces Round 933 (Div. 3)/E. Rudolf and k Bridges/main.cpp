@@ -1,7 +1,7 @@
 ///
-/// name: $(PROBLEM)
-/// link: $(URL)
-/// start: $(DATE)
+/// name: E. Rudolf and k Bridges
+/// link: https://codeforces.com/contest/1941/problem/E
+/// start: Mon Mar 11 16:56:49 2024
 ///
 
 #include <bits/stdc++.h>
@@ -57,7 +57,7 @@ void solve();
 signed main() {
   setIO("");
   int tc = 1;
-  // cin >> tc;
+  cin >> tc;
   for (int t = 1; t <= tc; t++) {
     dbg("Case #", t, ":");
     solve();
@@ -66,5 +66,37 @@ signed main() {
 
 
 void solve() {
+  rdi(rows, cols, nbridges, maxdist);
+  vvi river(rows, vi(cols));
+  for (auto& i : river) {
+    for (auto& j : i) {
+      cin >> j;
+    }
+  }
+  
+  vi bridgecost(cols);
+  for (int row = 0; row < rows; row++) {
+    vi dp(cols, intmax);
+    auto& bridge = river[row];
+    dp[0] = bridge[0] + 1;
+    for (int i = 0; i < cols; i++) {
+      for (int j = 0; j <= maxdist + 1 && i+j < cols; j++) {
+        dp[i+j] = min(dp[i+j], dp[i] + bridge[i+j] + 1);
+      }
+    }
+    dbg(dp);
+    bridgecost[row] = dp.back();
+  }
+  int ans = 0;
+  int cost = 0;
+  for (int i = 0; i < nbridges; i++) {
+    cost += bridgecost[i];
+  }
+  ans = cost;
+  for (int i = nbridges; i < rows; i++) {
+    cost += bridgecost[i] - bridgecost[i-nbridges];
+    ans = min(cost, ans);
+  }
 
+  cout << ans << endl;
 }

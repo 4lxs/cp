@@ -1,7 +1,7 @@
 ///
-/// name: $(PROBLEM)
-/// link: $(URL)
-/// start: $(DATE)
+/// name: B. Rudolf and 121
+/// link: https://codeforces.com/contest/1941/problem/B
+/// start: Mon Mar 11 15:48:39 2024
 ///
 
 #include <bits/stdc++.h>
@@ -57,7 +57,7 @@ void solve();
 signed main() {
   setIO("");
   int tc = 1;
-  // cin >> tc;
+  cin >> tc;
   for (int t = 1; t <= tc; t++) {
     dbg("Case #", t, ":");
     solve();
@@ -66,5 +66,18 @@ signed main() {
 
 
 void solve() {
-
+  rdi(n);
+  dbg(n);
+  rdvin(arr, n);
+  for (int i = 1; i < n - 1; i++) {
+    int sub = arr[i-1];
+    arr[i-1] -= sub;
+    arr[i] -= 2*sub;
+    arr[i+1] -= sub;
+    if (arr[i] < 0 || arr[i+1] < 0) {
+      cout << "NO" << endl;
+      return;
+    }
+  }
+  cout << (arr[n-1] == 0 && arr[n-2] == 0 ? "YES" : "NO") << endl;
 }

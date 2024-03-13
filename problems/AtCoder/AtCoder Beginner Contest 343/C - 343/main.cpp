@@ -1,7 +1,7 @@
 ///
-/// name: $(PROBLEM)
-/// link: $(URL)
-/// start: $(DATE)
+/// name: C - 343
+/// link: https://atcoder.jp/contests/abc343/tasks/abc343_c
+/// start: Sat Mar  2 13:59:48 2024
 ///
 
 #include <bits/stdc++.h>
@@ -64,7 +64,25 @@ signed main() {
   }
 }
 
+vi pals;
+
+bool ispal(int i) {
+  string n = to_string(i), k = n;
+  reverse(all(n));
+  return n == k;
+}
 
 void solve() {
-
+  rdi(n);
+  int out = 1;
+  for (int i = 1; i <= 1e6; i++) {
+    int k = i*i*i;
+    if (k > n) {
+      break;
+    }
+    if (ispal(k)) {
+      out = k;
+    }
+  }
+  cout << out << endl;
 }
