@@ -1,7 +1,7 @@
 ///
-/// name: $(PROBLEM)
-/// link: $(URL)
-/// start: $(DATE)
+/// name: D. Birthday Gift
+/// link: https://codeforces.com/contest/1946/problem/D
+/// start: Fri Mar 22 16:49:44 2024
 ///
 
 #include <bits/stdc++.h>
@@ -62,7 +62,7 @@ void solve();
 signed main() {
   setIO("");
   int tc = 1;
-  // cin >> tc;
+  cin >> tc;
   for (int t = 1; t <= tc; t++) {
     dbg("Case #", t, ":");
     solve();
@@ -71,5 +71,34 @@ signed main() {
 
 
 void solve() {
+  rdi(n, x);
+  rdvin(arr, n);
+  vi arr2;
+  arr2.reserve(n);
 
+  bool arriscurr = true;
+
+  bool isafter = false;
+  for (int bit = 1 << 30; (!isafter || (bit & x) != 0) && bit >= 1; bit = bit >> 1) {
+    vi & curr = arriscurr ? arr : arr2;
+    vi & other = arriscurr ? arr2 : arr;
+
+    int train = 0;
+    for (int i : curr) {
+      train ^= i;
+      if ((train & bit) == 0 || train <= x) {
+        dbg(bit, train);
+        other.push_back(train);
+        train = 0;
+      }
+    }
+    if (train) {
+      dbg(bit, train);
+      other.push_back(train);
+    }
+    arriscurr = !arriscurr;
+    curr.clear();
+    if ((bit & x) != 0) isafter = true;
+  }
+  cout << (arriscurr ? arr.size() : arr2.size()) << endl;
 }

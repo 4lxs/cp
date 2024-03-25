@@ -1,7 +1,7 @@
 ///
-/// name: $(PROBLEM)
-/// link: $(URL)
-/// start: $(DATE)
+/// name: C. The Third Problem
+/// link: https://codeforces.com/problemset/problem/1699/C
+/// start: Thu Mar 21 13:39:12 2024
 ///
 
 #include <bits/stdc++.h>
@@ -62,7 +62,7 @@ void solve();
 signed main() {
   setIO("");
   int tc = 1;
-  // cin >> tc;
+  cin >> tc;
   for (int t = 1; t <= tc; t++) {
     dbg("Case #", t, ":");
     solve();
@@ -71,5 +71,20 @@ signed main() {
 
 
 void solve() {
+  rdi(n);
+  vi arr(n);
+  for (int i = 0; i < n; i++) {
+    rdi(k);
+    arr[k] = i;
+  }
 
+  int l = arr[0], r = arr[0];
+  int out = 1;
+  for (int i = 1; i < n; i++) {
+    int pos = arr[i];
+    if (pos < l) l = pos;
+    else if (pos > r) r = pos;
+    else out = out*(r - l + 1 - i)%mod;
+  }
+  cout << out << endl;
 }

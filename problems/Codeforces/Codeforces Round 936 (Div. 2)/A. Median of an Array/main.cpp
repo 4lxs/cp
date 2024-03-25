@@ -1,7 +1,7 @@
 ///
-/// name: $(PROBLEM)
-/// link: $(URL)
-/// start: $(DATE)
+/// name: A. Median of an Array
+/// link: https://codeforces.com/contest/1946/problem/A
+/// start: Fri Mar 22 15:58:35 2024
 ///
 
 #include <bits/stdc++.h>
@@ -62,7 +62,7 @@ void solve();
 signed main() {
   setIO("");
   int tc = 1;
-  // cin >> tc;
+  cin >> tc;
   for (int t = 1; t <= tc; t++) {
     dbg("Case #", t, ":");
     solve();
@@ -71,5 +71,14 @@ signed main() {
 
 
 void solve() {
-
+  rdi(n);
+  rdvin(arr, n);
+  sort(all(arr));
+  int out = 1;
+  int i = (n+1)/2 - 1;
+  int median = arr[i];
+  for (i++; i < n && arr[i] == median; i++) {
+    out++;
+  }
+  cout << out << endl;
 }

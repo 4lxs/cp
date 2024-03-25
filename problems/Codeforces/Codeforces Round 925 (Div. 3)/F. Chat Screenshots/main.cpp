@@ -1,7 +1,7 @@
 ///
-/// name: $(PROBLEM)
-/// link: $(URL)
-/// start: $(DATE)
+/// name: F. Chat Screenshots
+/// link: https://codeforces.com/problemset/problem/1931/F
+/// start: Mon Mar 18 18:28:44 2024
 ///
 
 #include <bits/stdc++.h>
@@ -14,7 +14,7 @@ using namespace std;
 #define sz(x) (int)(x).size()
 [[maybe_unused]] const int intmax = std::numeric_limits<int>::max(); // for #define int int64_t
 [[maybe_unused]] const int intmin = std::numeric_limits<int>::min(); // for #define int int64_t
-[[maybe_unused]] const int mod = 1e9 + 7;
+[[maybe_unused]] const int mod = 10e9 + 7;
 using vi = vector<int>;
 using vvi = vector<vi>;
 using vb = vector<bool>;
@@ -24,10 +24,6 @@ using si = set<int>;
 using pii = pair<int, int>;
 using vpii = vector<pii>;
 using vvpii = vector<vpii>;
-using vs = vector<string>;
-using vvs = vector<vs>;
-using vc = vector<char>;
-using vvc = vector<vc>;
 
 template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
 template<typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type> ostream& operator<<(ostream &os, const T_container &v) { os << '{'; string sep; for (const T &x : v) os << sep << x, sep = ", "; return os << '}'; }
@@ -62,7 +58,7 @@ void solve();
 signed main() {
   setIO("");
   int tc = 1;
-  // cin >> tc;
+  cin >> tc;
   for (int t = 1; t <= tc; t++) {
     dbg("Case #", t, ":");
     solve();
@@ -71,5 +67,42 @@ signed main() {
 
 
 void solve() {
+  rdi(npart, nscreen);
+  vvi adj(npart+1);
+  for (int j = 0; j < nscreen; j++) {
+    int prev = 0;
+    rdi(tmp);
+    for (int i = 2; i <= npart; i++) {
+      rdi(pi);
+      if (prev != 0) {
+        adj[pi].push_back(prev);
+      }
+      prev = pi;
+    }
+  }
 
+  dbg(adj);
+  vi processing(npart+1, 0);
+  auto dfs = [&](auto && self, int i) {
+    dbg(i);
+    processing[i] = 1;
+    for (int n : adj[i]) {
+      if (processing[n] == 2) continue;
+      if (processing[n] == 1) {
+        return false;
+      }
+      if (!self(self, n)) {
+        return false;
+      }
+    }
+    processing[i] = 2;
+    return true;
+  };
+  for (int i = 1; i <= npart; i++) {
+    if (processing[i] == 0 && !dfs(dfs, i)) {
+      cout << "NO\n";
+      return;
+    }
+  }
+  cout << "YES\n";
 }

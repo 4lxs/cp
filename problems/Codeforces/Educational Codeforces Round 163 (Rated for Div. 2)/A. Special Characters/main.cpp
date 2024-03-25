@@ -1,7 +1,7 @@
 ///
-/// name: $(PROBLEM)
-/// link: $(URL)
-/// start: $(DATE)
+/// name: A. Special Characters
+/// link: https://codeforces.com/contest/1948/problem/0
+/// start: Fri Mar 15 15:39:14 2024
 ///
 
 #include <bits/stdc++.h>
@@ -14,20 +14,15 @@ using namespace std;
 #define sz(x) (int)(x).size()
 [[maybe_unused]] const int intmax = std::numeric_limits<int>::max(); // for #define int int64_t
 [[maybe_unused]] const int intmin = std::numeric_limits<int>::min(); // for #define int int64_t
-[[maybe_unused]] const int mod = 1e9 + 7;
+[[maybe_unused]] const int mod = 10e9 + 7;
 using vi = vector<int>;
-using vvi = vector<vi>;
+using vvi = vector<vector<int>>;
 using vb = vector<bool>;
-using vvb = vector<vb>;
 using vc = vector<char>;
 using si = set<int>;
 using pii = pair<int, int>;
 using vpii = vector<pii>;
-using vvpii = vector<vpii>;
-using vs = vector<string>;
-using vvs = vector<vs>;
-using vc = vector<char>;
-using vvc = vector<vc>;
+using vvpii = vector<vector<pii>>;
 
 template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
 template<typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type> ostream& operator<<(ostream &os, const T_container &v) { os << '{'; string sep; for (const T &x : v) os << sep << x, sep = ", "; return os << '}'; }
@@ -42,10 +37,10 @@ template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr
 template<typename... Args> void __read(Args&&... args) { (cin >> ... >> args); }
 #define rdi(...) int __VA_ARGS__; __read(__VA_ARGS__)
 #define rdc(...) char __VA_ARGS__; __read(__VA_ARGS__)
-#define rds(...) string __VA_ARGS__; __read(__VA_ARGS__)
 #define rdvin(var, n) vi var(n); for (auto & i : var) cin >> i;
 #define rdvbn(var, n) vb var(n); for (auto & i : var) cin >> i;
 #define rdvcn(var, n) vc var(n); for (auto & i : var) cin >> i;
+#define rds(var) string var; cin >> var;
 
 void setIO(string name = "") {
   cin.tie(0)->sync_with_stdio(0);
@@ -62,7 +57,7 @@ void solve();
 signed main() {
   setIO("");
   int tc = 1;
-  // cin >> tc;
+  cin >> tc;
   for (int t = 1; t <= tc; t++) {
     dbg("Case #", t, ":");
     solve();
@@ -71,5 +66,15 @@ signed main() {
 
 
 void solve() {
-
+  rdi(n);
+  if (n % 2 == 1) {
+    cout << "NO\n";
+    return;
+  }
+  cout << "YES\n";
+  bool isb = true;
+  for (int i = 0; i < n/2; i++) {
+    cout << ((isb = !isb) ? "BB" : "AA");
+  }
+  cout << endl;
 }

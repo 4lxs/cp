@@ -1,7 +1,7 @@
 ///
-/// name: $(PROBLEM)
-/// link: $(URL)
-/// start: $(DATE)
+/// name: F. L-shapes
+/// link: https://codeforces.com/problemset/problem/1722/F
+/// start: Wed Mar 20 17:57:33 2024
 ///
 
 #include <bits/stdc++.h>
@@ -14,7 +14,7 @@ using namespace std;
 #define sz(x) (int)(x).size()
 [[maybe_unused]] const int intmax = std::numeric_limits<int>::max(); // for #define int int64_t
 [[maybe_unused]] const int intmin = std::numeric_limits<int>::min(); // for #define int int64_t
-[[maybe_unused]] const int mod = 1e9 + 7;
+[[maybe_unused]] const int mod = 10e9 + 7;
 using vi = vector<int>;
 using vvi = vector<vi>;
 using vb = vector<bool>;
@@ -62,14 +62,52 @@ void solve();
 signed main() {
   setIO("");
   int tc = 1;
-  // cin >> tc;
+  cin >> tc;
   for (int t = 1; t <= tc; t++) {
     dbg("Case #", t, ":");
     solve();
   }
 }
 
-
 void solve() {
-
+  rdi(n, m);
+  vvc grid(n+2, vc(m+2, '.'));
+  for (int i = 1; i <= n; i++) {
+    for (int j = 1; j <= m; j++) {
+      cin >> grid[i][j];
+    }
+  }
+  
+  for (int i = 1; i <= n; i++) {
+    for (int j = 1; j <= m; j++) {
+      if (grid[i][j] == '*') {
+        if (grid[i+1][j] == '*') {
+          if (grid[i+1][j-1] != '*' && grid[i+1][j+1] != '*' && grid[i][j-1] != '*' && grid[i][j+1] != '*') {
+            dbg(i+j);
+            cout << "NO" << endl;
+            return;
+          }
+        } else if (grid[i-1][j] == '*') {
+          if (grid[i-1][j-1] != '*' && grid[i-1][j+1] != '*' && grid[i][j-1] != '*' && grid[i][j+1] != '*') {
+            dbg(i+j);
+            cout << "NO" << endl;
+            return;
+          }
+        } else if (grid[i][j+1] == '*') {
+          if (grid[i+1][j] != '*' && grid[i-1][j] != '*' && grid[i+1][j+1] != '*' && grid[i-1][j+1] != '*') {
+            dbg(i+j);
+            cout << "NO" << endl;
+            return;
+          }
+        } else if (grid[i][j-1] == '*') {
+          if (grid[i+1][j] != '*' && grid[i-1][j] != '*' && grid[i+1][j-1] != '*' && grid[i-1][j-1] != '*') {
+            dbg(i,j);
+            cout << "NO" << endl;
+            return;
+          }
+        }
+      }
+    }
+  }
+  cout << "YES" << endl;
 }

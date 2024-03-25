@@ -1,7 +1,7 @@
 ///
-/// name: $(PROBLEM)
-/// link: $(URL)
-/// start: $(DATE)
+/// name: C. Arrow Path
+/// link: https://codeforces.com/contest/1948/problem/C
+/// start: Fri Mar 15 16:14:27 2024
 ///
 
 #include <bits/stdc++.h>
@@ -14,7 +14,7 @@ using namespace std;
 #define sz(x) (int)(x).size()
 [[maybe_unused]] const int intmax = std::numeric_limits<int>::max(); // for #define int int64_t
 [[maybe_unused]] const int intmin = std::numeric_limits<int>::min(); // for #define int int64_t
-[[maybe_unused]] const int mod = 1e9 + 7;
+[[maybe_unused]] const int mod = 10e9 + 7;
 using vi = vector<int>;
 using vvi = vector<vi>;
 using vb = vector<bool>;
@@ -24,10 +24,6 @@ using si = set<int>;
 using pii = pair<int, int>;
 using vpii = vector<pii>;
 using vvpii = vector<vpii>;
-using vs = vector<string>;
-using vvs = vector<vs>;
-using vc = vector<char>;
-using vvc = vector<vc>;
 
 template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
 template<typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type> ostream& operator<<(ostream &os, const T_container &v) { os << '{'; string sep; for (const T &x : v) os << sep << x, sep = ", "; return os << '}'; }
@@ -62,7 +58,7 @@ void solve();
 signed main() {
   setIO("");
   int tc = 1;
-  // cin >> tc;
+  cin >> tc;
   for (int t = 1; t <= tc; t++) {
     dbg("Case #", t, ":");
     solve();
@@ -71,5 +67,30 @@ signed main() {
 
 
 void solve() {
+  rdi(n);
+  rds(first, second);
 
+  int colreached = 0;
+
+  while (true) {
+    if (colreached == n-1) {
+      break;
+    }
+    auto & samerow = colreached % 2 == 0 ? first : second;
+    auto & otherrow = colreached % 2 == 0 ? second : first;
+    if (colreached != n-2 && samerow[colreached+1] == '>') {
+      colreached += 2;
+    }
+    else if (otherrow[colreached] == '>') {
+      colreached++;
+    }
+    else if (colreached == n-2 && colreached % 2 == 1) {
+      colreached++;
+      break;
+    }
+    else {
+      break;
+    }
+  }
+  cout << (colreached == n-1 ? "YES" : "NO") << endl;
 }

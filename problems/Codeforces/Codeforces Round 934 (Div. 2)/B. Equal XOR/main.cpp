@@ -1,7 +1,7 @@
 ///
-/// name: $(PROBLEM)
-/// link: $(URL)
-/// start: $(DATE)
+/// name: B. Equal XOR
+/// link: https://codeforces.com/contest/1944/problem/B
+/// start: Sat Mar 16 15:42:25 2024
 ///
 
 #include <bits/stdc++.h>
@@ -14,7 +14,7 @@ using namespace std;
 #define sz(x) (int)(x).size()
 [[maybe_unused]] const int intmax = std::numeric_limits<int>::max(); // for #define int int64_t
 [[maybe_unused]] const int intmin = std::numeric_limits<int>::min(); // for #define int int64_t
-[[maybe_unused]] const int mod = 1e9 + 7;
+[[maybe_unused]] const int mod = 10e9 + 7;
 using vi = vector<int>;
 using vvi = vector<vi>;
 using vb = vector<bool>;
@@ -24,10 +24,6 @@ using si = set<int>;
 using pii = pair<int, int>;
 using vpii = vector<pii>;
 using vvpii = vector<vpii>;
-using vs = vector<string>;
-using vvs = vector<vs>;
-using vc = vector<char>;
-using vvc = vector<vc>;
 
 template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
 template<typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type> ostream& operator<<(ostream &os, const T_container &v) { os << '{'; string sep; for (const T &x : v) os << sep << x, sep = ", "; return os << '}'; }
@@ -62,7 +58,7 @@ void solve();
 signed main() {
   setIO("");
   int tc = 1;
-  // cin >> tc;
+  cin >> tc;
   for (int t = 1; t <= tc; t++) {
     dbg("Case #", t, ":");
     solve();
@@ -71,5 +67,55 @@ signed main() {
 
 
 void solve() {
+  rdi(n, k);
+  rdvin(l, n);
+  rdvin(r, n);
+  dbg(l, r);
+  vi dups(n+1, 0);
+  vi singles;
+  singles.reserve(n);
+  int out = 0;
+  for (auto i : l) {
+    if (out == k) {
+      break;
+    }
+    dups[i]++;
+    if (dups[i] == 2) {
+      cout << i << " " << i << " ";
+      out++;
+    }
+  }
+  out *= 2;
 
+  for (auto i : l) {
+    if (out == 2*k) {
+      break;
+    }
+    if (dups[i] == 1) {
+      singles.push_back(i);
+      cout << i << " ";
+      out++;
+    }
+  }
+  cout << endl;
+  dbg(out);
+  if (out != 2*k) throw std::runtime_error("fuck");
+  fill(all(dups), 0);
+
+  out = 0;
+  for (auto i : r) {
+    if (out == k) {
+      break;
+    }
+    dups[i]++;
+    if (dups[i] == 2) {
+      cout << i << " " << i << " ";
+      out++;
+    }
+  }
+
+  for (auto i : singles) {
+    cout << i << " ";
+  }
+  cout << endl;
 }

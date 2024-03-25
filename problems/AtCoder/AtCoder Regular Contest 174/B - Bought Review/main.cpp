@@ -1,7 +1,7 @@
 ///
-/// name: $(PROBLEM)
-/// link: $(URL)
-/// start: $(DATE)
+/// name: B - Bought Review
+/// link: https://atcoder.jp/contests/arc174/tasks/arc174_b
+/// start: Sun Mar 17 13:39:34 2024
 ///
 
 #include <bits/stdc++.h>
@@ -14,7 +14,7 @@ using namespace std;
 #define sz(x) (int)(x).size()
 [[maybe_unused]] const int intmax = std::numeric_limits<int>::max(); // for #define int int64_t
 [[maybe_unused]] const int intmin = std::numeric_limits<int>::min(); // for #define int int64_t
-[[maybe_unused]] const int mod = 1e9 + 7;
+[[maybe_unused]] const int mod = 10e9 + 7;
 using vi = vector<int>;
 using vvi = vector<vi>;
 using vb = vector<bool>;
@@ -24,10 +24,6 @@ using si = set<int>;
 using pii = pair<int, int>;
 using vpii = vector<pii>;
 using vvpii = vector<vpii>;
-using vs = vector<string>;
-using vvs = vector<vs>;
-using vc = vector<char>;
-using vvc = vector<vc>;
 
 template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
 template<typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type> ostream& operator<<(ostream &os, const T_container &v) { os << '{'; string sep; for (const T &x : v) os << sep << x, sep = ", "; return os << '}'; }
@@ -62,7 +58,7 @@ void solve();
 signed main() {
   setIO("");
   int tc = 1;
-  // cin >> tc;
+  cin >> tc;
   for (int t = 1; t <= tc; t++) {
     dbg("Case #", t, ":");
     solve();
@@ -71,5 +67,34 @@ signed main() {
 
 
 void solve() {
+  rdvin(counts, 5);
+  rdvin(prices, 5);
+  int sum = 2 * counts[0] + counts[1] - counts[3] - 2 * counts[4];
+  if (sum <= 0) {
+    cout << 0 << endl;
+    return;
+  }
 
+  bool buy5s = prices[4] > 2 * prices[3];
+
+  int cnt5s = 0, cnt4s = 0;
+  if (buy5s) {
+    cnt5s = sum / 2;
+    cnt5s += sum % 2;
+  } else {
+    cnt4s = sum;
+  }
+
+  int price = prices[4] * cnt5s + prices[3] * cnt4s;
+  if (cnt5s > 0) {
+    int newprice = prices[4] * (cnt5s-1) + prices[3] * (cnt4s+1);
+    if (newprice < price && cnt5s * 2 + cnt4s >= sum) {
+      cnt5s--;
+      cnt4s++;
+    }
+  }
+
+  dbg(cnt4s, cnt5s);
+  price = prices[4] * cnt5s + prices[3] * cnt4s;
+  cout << price << endl;
 }

@@ -1,7 +1,7 @@
 ///
-/// name: $(PROBLEM)
-/// link: $(URL)
-/// start: $(DATE)
+/// name: B. Maximum Sum
+/// link: https://codeforces.com/contest/1946/problem/B
+/// start: Fri Mar 22 16:08:27 2024
 ///
 
 #include <bits/stdc++.h>
@@ -62,7 +62,7 @@ void solve();
 signed main() {
   setIO("");
   int tc = 1;
-  // cin >> tc;
+  cin >> tc;
   for (int t = 1; t <= tc; t++) {
     dbg("Case #", t, ":");
     solve();
@@ -71,5 +71,23 @@ signed main() {
 
 
 void solve() {
+  rdi(n, k);
+  rdvin(arr, n);
 
+  int sum = 0, sub = 0, maxsub = 0;
+  for (int i : arr) {
+    sum += i;
+    sub += i;
+    if (sub < 0) sub = 0;
+    maxsub = max(maxsub, sub);
+  }
+  dbg(maxsub, sum);
+  for (int i = 0; i < k-1; i++) {
+    sum = (sum + maxsub) % mod;
+    maxsub = (maxsub * 2) % mod;
+  }
+  sum += maxsub;
+  sum %= mod;
+  if (sum < 0) sum += mod;
+  cout << sum << endl;
 }
