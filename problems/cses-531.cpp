@@ -1,21 +1,16 @@
+
 #include <bits/stdc++.h>
+#include <queue>
 using namespace std;
 
-// #define testcases
 #define int int64_t
-const string name = ""; // for usaco
 
-#define all(x) begin(x), end(x)
+#define all(x) x.begin(), x.end()
 #define pb push_back
 #define sz(x) (int)(x).size()
-#define rep(i, a, b) for(int i = a; i < (b); ++i)
-#define lsone(x) ((x) & -(x)) // least significant one (01010 -> 00010)
-#define nl '\n'
-#define endl
 [[maybe_unused]] const int inf = std::numeric_limits<int>::max(); // for #define int int64_t
 [[maybe_unused]] const int minf = std::numeric_limits<int>::min(); // for #define int int64_t
 [[maybe_unused]] const int mod = 1e9 + 7;
-typedef long long ll;
 using vi = vector<int>;
 using vvi = vector<vi>;
 using vb = vector<bool>;
@@ -32,7 +27,7 @@ using vvc = vector<vc>;
 
 template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
 template<typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type> ostream& operator<<(ostream &os, const T_container &v) { os << '{'; string sep; for (const T &x : v) os << sep << x, sep = ", "; return os << '}'; }
-void dbg_out() { cerr << nl; }
+void dbg_out() { cerr << endl; }
 template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr << ' ' << H; dbg_out(T...); }
 #ifdef LOCAL
 #define dbg(...) cerr << "(" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)
@@ -48,27 +43,67 @@ template<typename... Args> void __read(Args&&... args) { (cin >> ... >> args); }
 #define rdvbn(var, n) vb var(n); for (auto & i : var) cin >> i;
 #define rdvcn(var, n) vc var(n); for (auto & i : var) cin >> i;
 
-void solve();
-
-signed main() {
+void setIO(string name = "") {
   cin.tie(0)->sync_with_stdio(0);
-  cin.exceptions(cin.failbit);
   if (!name.empty()) {
 #ifndef LOCAL
     (void)freopen((name + ".in").c_str(), "r", stdin);
     (void)freopen((name + ".out").c_str(), "w", stdout);
 #endif
   }
+}
+
+void solve();
+
+signed main() {
+  setIO("superbull");
   int tc = 1;
-#ifdef testcases
-  cin >> tc;
-#endif
+  // cin >> tc;
   for (int t = 1; t <= tc; t++) {
     dbg("Case #", t, ":");
     solve();
   }
 }
 
+int mst_prim(vvpii& G) {
+    int N = G.size();
+    priority_queue<pii> pq;
+    pq.push({0, 0});
+    vi dist(N, minf);
+    dist[0] = 0;
+    vb vis(N);
+    int min_cost = 0, added = 0;
+
+    while (added < N) {
+        if (pq.empty()) return -1;
+        auto [w, u] = pq.top(); pq.pop();
+        if (dist[u] > w) continue;
+        dbg(u, w);
+        vis[u] = true;
+        added++;
+        min_cost += w;
+        for (auto [o, w] : G[u]) {
+            if (vis[o] || dist[o] > w) continue;
+            dist[o] = w;
+            pq.push({w, o});
+        }
+    }
+
+    return min_cost;
+}
+
 void solve() {
-  
+    rdi(N);
+    rdvin(A, N);
+
+    vvpii G(N);
+    for (int i = 0; i < N; i++) {
+        for (int j = i + 1; j < N; j++) {
+            int w = A[i] ^ A[j];
+            G[i].push_back({j, w});
+            G[j].push_back({i, w});
+        }
+    }
+    dbg(G);
+    cout << mst_prim(G) << endl;
 }

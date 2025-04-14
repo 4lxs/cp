@@ -1,7 +1,9 @@
+#include <algorithm>
 #include <bits/stdc++.h>
+#include <numeric>
 using namespace std;
 
-// #define testcases
+#define testcases
 #define int int64_t
 const string name = ""; // for usaco
 
@@ -70,5 +72,25 @@ signed main() {
 }
 
 void solve() {
-  
+  rdi(N);
+  rdvin(A, N);
+  rdvin(B, N);
+
+  vi ps(N), full(N + 1), ans(N + 1);
+  partial_sum(all(B), ps.begin());
+
+  rep(i, 0, N) {
+    if (i > 0) A[i] += ps[i - 1];
+    int li = lower_bound(all(ps), A[i]) - ps.begin();
+    dbg(i, li);
+    full[i]++;
+    full[li]--;
+    ans[li] += A[i] - (li > 0 ? ps[li - 1] : 0);
+  }
+  partial_sum(all(full), full.begin());
+  dbg(full, ans);
+  rep(i, 0, N){
+    cout << full[i] * B[i] + ans[i] << ' ';
+  }
+  cout << nl;
 }

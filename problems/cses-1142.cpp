@@ -70,5 +70,42 @@ signed main() {
 }
 
 void solve() {
-  
+    rdi(N);
+    rdvin(A, N);
+    int out = 0;
+    stack<pii> s;
+
+    vi m(N);
+    rep(i, 0, N) {
+        int a = A[i];
+        while (!s.empty() && s.top().first >= a) s.pop();
+        if (s.empty()) {
+            m[i] = i;
+            s.push({a, i});
+            continue;
+        }
+        int lsi = s.top().second;
+        m[i] = i - lsi - 1;
+        dbg(i, lsi, s.top().first, m[i]);
+        s.push({a, i});
+    }
+    s = {};
+    dbg(m);
+
+    for (int i = N - 1; i >= 0; i--) {
+        int a = A[i];
+        while (!s.empty() && s.top().first >= a) s.pop();
+        if (s.empty()) {
+            out = max(out, a * (m[i] + N - i));
+            s.push({a, i});
+            continue;
+        }
+        int lsi = s.top().second;
+
+        int w = lsi - i;
+        out = max(out, (w + m[i]) * a);
+        dbg(lsi, w, A[lsi]);
+        s.push({a, i});
+    }
+    cout << out << nl;
 }

@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// #define testcases
+#define testcases
 #define int int64_t
 const string name = ""; // for usaco
 
@@ -10,8 +10,6 @@ const string name = ""; // for usaco
 #define sz(x) (int)(x).size()
 #define rep(i, a, b) for(int i = a; i < (b); ++i)
 #define lsone(x) ((x) & -(x)) // least significant one (01010 -> 00010)
-#define nl '\n'
-#define endl
 [[maybe_unused]] const int inf = std::numeric_limits<int>::max(); // for #define int int64_t
 [[maybe_unused]] const int minf = std::numeric_limits<int>::min(); // for #define int int64_t
 [[maybe_unused]] const int mod = 1e9 + 7;
@@ -32,7 +30,7 @@ using vvc = vector<vc>;
 
 template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
 template<typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type> ostream& operator<<(ostream &os, const T_container &v) { os << '{'; string sep; for (const T &x : v) os << sep << x, sep = ", "; return os << '}'; }
-void dbg_out() { cerr << nl; }
+void dbg_out() { cerr << endl; }
 template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr << ' ' << H; dbg_out(T...); }
 #ifdef LOCAL
 #define dbg(...) cerr << "(" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)
@@ -70,5 +68,30 @@ signed main() {
 }
 
 void solve() {
-  
+    rdi(N);
+    rdvin(A, N * (N - 1) / 2);
+
+    sort(all(A), greater<int>());
+
+    vpii b = {pii{0, A.front()}};
+    for (int a : A) {
+        if (a == b.back().second) b.back().first++;
+        else b.pb({1, a});
+    }
+
+    dbg(b);
+    int sub = 0;
+    for (auto [cnt, a] : b) {
+        int origcnt = (1 - 2 * sub + int(round(sqrt((2 * sub - 1) * (2 * sub - 1) + 8 * cnt)))) / 2;
+        dbg(a, cnt, sub, origcnt);
+        assert(origcnt * (origcnt - 1) / 2 + sub * origcnt == cnt);
+
+        rep(i, 0, origcnt) {
+            cout << a << ' ';
+        }
+
+        sub += origcnt;
+    }
+
+    cout << endl;
 }

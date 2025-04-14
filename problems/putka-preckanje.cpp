@@ -70,5 +70,27 @@ signed main() {
 }
 
 void solve() {
-  
+    rdi(A, B);
+    vpii segs;
+    rep(i, 0, A + B) {
+        rdi(N);
+        rdvin(D, N);
+        for (auto d : D) {
+            int c = 1e9 * 20 * 72 / 36 / 5;
+            segs.pb({d - (i + 1) * c, d - c * i});
+            dbg(d, c * i, i, segs.back());
+        }
+    }
+    sort(all(segs));
+    dbg(segs);
+    int pos = 0;
+    for (auto [r, l] : segs) {
+        if (pos < r) {
+            cout << pos << nl;
+            return;
+        } else {
+            pos = max(pos, l);
+        }
+    }
+    cout << pos + (A + B) * 1e9 * 72 / 50 << nl;
 }

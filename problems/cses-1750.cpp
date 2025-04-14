@@ -69,6 +69,43 @@ signed main() {
   }
 }
 
+vector<vi> treeJump(vi& P){
+	int on = 1, d = 1;
+	while(on < 1e9) on *= 2, d++;
+	vector<vi> jmp(d, P);
+	rep(i,1,d) rep(j,0,sz(P))
+		jmp[i][j] = jmp[i-1][jmp[i-1][j]];
+	return jmp;
+}
+
+int jmp(vector<vi>& tbl, int nod, int steps){
+	rep(i,0,sz(tbl))
+		if(steps&(1<<i)) nod = tbl[i][nod];
+	return nod;
+}
+
+int lca(vector<vi>& tbl, vi& depth, int a, int b) {
+	if (depth[a] < depth[b]) swap(a, b);
+	a = jmp(tbl, a, depth[a] - depth[b]);
+	if (a == b) return a;
+	for (int i = sz(tbl); i--;) {
+		int c = tbl[i][a], d = tbl[i][b];
+		if (c != d) a = c, b = d;
+	}
+	return tbl[0][a];
+}
+
 void solve() {
-  
+    rdi(N, Q);
+    vi D(N + 1);
+    rep(i, 0, N) {
+        cin >> D[i+1];
+    }
+
+    vvi t = treeJump(D);
+
+    rep(q, 0, Q) {
+        rdi(X, K);
+        cout << jmp(t, X, K) << nl; 
+    }
 }

@@ -70,5 +70,21 @@ signed main() {
 }
 
 void solve() {
-  
+    rdi(X, N);
+    map<int, int, greater<int>> r;
+    multiset<int> d;
+    r.insert({0, X});
+    d.insert(X);
+
+    rep(i, 0, N) {
+        rdi(p);
+        auto it = r.lower_bound(p);
+        d.erase(d.find(it->second));
+        int plen = it->first + it->second - p;
+        it->second = p - it->first;
+        d.insert(it->second);
+        d.insert(plen);
+        r.insert({p, plen});
+        cout << *d.rbegin() << ' ';
+    }
 }

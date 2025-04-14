@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// #define testcases
+#define testcases
 #define int int64_t
 const string name = ""; // for usaco
 
@@ -70,5 +70,17 @@ signed main() {
 }
 
 void solve() {
-  
+    rdi(N);
+    rdvin(A, N);
+    vi diff;
+    diff.reserve(N*N);
+    rep(i, 0, N) {
+        rep(j, i + 1, N) {
+            diff.pb(abs(A[i] - A[j]));
+        }
+    }
+
+    int ans = minf;
+    for (int i : diff) ans = max(ans, i);
+    cout << ans << nl;
 }

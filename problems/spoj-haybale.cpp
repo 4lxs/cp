@@ -70,5 +70,18 @@ signed main() {
 }
 
 void solve() {
-  
+    rdi(N, K);
+
+    vi a(N+2);
+    rep(i, 0, K) {
+        rdi(A, B);
+        a[A]++;
+        a[B]--;
+    }
+    vi ps(N);
+    partial_sum(a.begin() + 1, a.end() - 1, ps.begin());
+
+    sort(all(ps));
+    dbg(ps);
+    cout << ps[N / 2 + 1] << nl;
 }

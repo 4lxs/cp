@@ -1,7 +1,10 @@
+#include <bits/extc++.h> /** keep-include */
+using namespace __gnu_pbds;
+
 #include <bits/stdc++.h>
 using namespace std;
 
-// #define testcases
+#define testcases
 #define int int64_t
 const string name = ""; // for usaco
 
@@ -69,6 +72,32 @@ signed main() {
   }
 }
 
+template<class T>
+using Tree = tree<T, null_type, less<T>, rb_tree_tag,
+    tree_order_statistics_node_update>;
+
 void solve() {
-  
+    rdi(N);
+    vector<tuple<int, bool, int>> p;
+    p.reserve(2*N);
+    rep(i, 0, N) {
+        rdi(a, b);
+        p.push_back({a, true, b});
+        p.push_back({b, false, a});
+    }
+    sort(all(p));
+
+    Tree<int> open;
+
+    int ans = 0;
+    for (auto [x, start, o] : p) {
+        if (start) open.insert(x);
+        else {
+            open.erase(o);
+            auto it = open.upper_bound(o);
+            dbg(x, o, open, it == open.end() ? -2 : *it);
+            ans += it == open.end() ? open.size() : open.order_of_key(*it);
+        }
+    }
+    cout << ans << nl;
 }

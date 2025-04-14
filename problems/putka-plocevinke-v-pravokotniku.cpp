@@ -70,5 +70,22 @@ signed main() {
 }
 
 void solve() {
-  
+    const int mn = 1e7+1;
+    const int ms = sqrt(mn);
+    vi tbl(mn);
+
+    rep(i, 3, ms + 1) {
+        for (int j = i;; j++) {
+			int p = i * j;
+			if (p >= mn) break;
+			int in = p - 2 * i - 2 * j + 4;
+			if (in > tbl[p]) tbl[p] = in;
+        }
+    }
+
+    rdi(v);
+    rep(i, 0, v) {
+        rdi(p);
+		cout << tbl[p] << nl;
+	}
 }

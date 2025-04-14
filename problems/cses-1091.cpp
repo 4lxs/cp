@@ -70,5 +70,19 @@ signed main() {
 }
 
 void solve() {
-  
+    rdi(N, M);
+    rdvin(A, N);
+    multiset<int, greater<int>> p(all(A));
+
+    while (M--) {
+        rdi(c);
+
+        auto it = p.upper_bound(c + 1);
+        if (it == p.end()) {
+            cout << -1 << '\n';
+        } else {
+            cout << *it << nl;
+            p.erase(it);
+        }
+    }
 }

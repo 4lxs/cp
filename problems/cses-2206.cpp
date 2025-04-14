@@ -2,7 +2,7 @@
 using namespace std;
 
 // #define testcases
-#define int int64_t
+// #define int int64_t
 const string name = ""; // for usaco
 
 #define all(x) begin(x), end(x)
@@ -69,6 +69,66 @@ signed main() {
   }
 }
 
+
+/**
+ * Author: Lucian Bicsi
+ * Date: 2017-10-31
+ * License: CC0
+ * Source: folklore
+ * Description: Zero-indexed max-tree. Bounds are inclusive to the left and exclusive to the right.
+ * Can be changed by modifying T, f and unit.
+ * Time: O(\log N)
+ * Status: stress-tested
+ */
+
+struct Tree {
+	typedef int T;
+	static constexpr T unit = inf;
+	T f(T a, T b) { return min(a, b); } // (any associative fn)
+	vector<T> s; int n;
+	Tree(int n = 0, T def = unit) : s(2*n, def), n(n) {}
+	void update(int pos, T val) {
+		for (s[pos += n] = val; pos /= 2;)
+			s[pos] = f(s[pos * 2], s[pos * 2 + 1]);
+	}
+	T query(int b, int e) { // query [b, e)
+		T ra = unit, rb = unit;
+		for (b += n, e += n; b < e; b /= 2, e /= 2) {
+			if (b % 2) ra = f(ra, s[b++]);
+			if (e % 2) rb = f(s[--e], rb);
+		}
+		return f(ra, rb);
+	}
+};
+
 void solve() {
-  
+
+    rdi(N, Q);
+    rdvin(P, N);
+
+    Tree l(N + 1), r(N + 1);
+    rep(i, 1, N + 1) {
+        l.update(i, P[i - 1] - i);
+        r.update(i, P[i - 1] + i);
+    }
+
+    rep(q, 0, Q) {
+        rdi(T, K);
+        // dbg(T, K);
+        if (T == 1) {
+            rdi(X);
+            l.update(K, X - K);
+            r.update(K, X + K);
+            // dbg(l.s);
+            // dbg(r.s);
+        } else {
+            // dbg(l.s);
+            // dbg(r.s);
+            if (K == 1) {
+                cout << r.query(K, N + 1) - K << nl;
+            }  else {
+                cout << min(l.query(1, K) + K, r.query(K, N + 1) - K) << nl;
+            }
+        }
+    }
 }
