@@ -1,4 +1,5 @@
-// #define testcases
+
+#define testcases
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -50,7 +51,6 @@ template<typename... Args> void __read(Args&&... args) { (cin >> ... >> args); }
 #define rdvcn(var, n) vc var(n); for (auto & i : var) cin >> i;
 
 void solve();
-void init();
 
 signed main() {
   cin.tie(0)->sync_with_stdio(0);
@@ -65,17 +65,40 @@ signed main() {
 #ifdef testcases
   cin >> tc;
 #endif
-  init();
   for (int t = 1; t <= tc; t++) {
     dbg("Case #", t, ":");
     solve();
   }
 }
 
-void init() {
-  
-}
-
 void solve() {
-  
+  rdi(N, M);
+  vi f(N + 2);
+  rep(i, 1, N + 2) {
+    f[i] = N - i;
+  }
+  rep(i, 0, M) {
+    rdi(a, b);
+    if (a > b) swap(a, b);
+    f[a] = min(f[a], b - a - 1);
+  }
+
+  for (int i = N - 1; i > 0; i--) {
+    f[i] = min(f[i], f[i + 1] + 1);
+  }
+
+  int ans = N;
+
+  rep(i, 1, N) {
+    if (i != 1 && f[i] < f[i - 1]) continue;
+    if (f[i] <= f[i + 1]) {
+      ans += f[i];
+    } else {
+      ans += f[i] * (f[i] + 1) / 2;
+    }
+  }
+
+  dbg(f);
+
+  cout << ans << nl;
 }

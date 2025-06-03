@@ -1,4 +1,5 @@
-// #define testcases
+
+#define testcases
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -50,7 +51,6 @@ template<typename... Args> void __read(Args&&... args) { (cin >> ... >> args); }
 #define rdvcn(var, n) vc var(n); for (auto & i : var) cin >> i;
 
 void solve();
-void init();
 
 signed main() {
   cin.tie(0)->sync_with_stdio(0);
@@ -65,17 +65,34 @@ signed main() {
 #ifdef testcases
   cin >> tc;
 #endif
-  init();
   for (int t = 1; t <= tc; t++) {
     dbg("Case #", t, ":");
     solve();
   }
 }
 
-void init() {
-  
-}
-
 void solve() {
-  
+  rdi(N);
+  vvpii g(N + 1);
+
+  int sk = 0;
+  rep(I, 1, N) {
+    rdi(i, j);
+    if ((i == 1 || j == 1) && sk == 0) sk = I;
+    g[i].pb({I, j});
+    g[j].pb({I, i});
+  }
+  // for (auto& i : g) sort(all(i));
+
+  vi dist(N +1, -1);
+
+  auto dfs = [&](auto& dfs, int n, int d, int k) -> void {
+    if (dist[n] != -1) return;
+    dist[n] = d;
+    for (auto [ok, o] : g[n]) dfs(dfs, o, ok < k ? d + 1 : d, ok);
+  };
+
+  dfs(dfs, 1, 1, sk);
+  dbg(dist);
+  cout << *max_element(all(dist)) << nl;
 }

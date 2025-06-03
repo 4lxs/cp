@@ -1,8 +1,8 @@
-// #define testcases
 
 #include <bits/stdc++.h>
 using namespace std;
 
+#define testcases
 #define int int64_t
 const string name = ""; // for usaco
 
@@ -50,7 +50,6 @@ template<typename... Args> void __read(Args&&... args) { (cin >> ... >> args); }
 #define rdvcn(var, n) vc var(n); for (auto & i : var) cin >> i;
 
 void solve();
-void init();
 
 signed main() {
   cin.tie(0)->sync_with_stdio(0);
@@ -65,17 +64,42 @@ signed main() {
 #ifdef testcases
   cin >> tc;
 #endif
-  init();
   for (int t = 1; t <= tc; t++) {
     dbg("Case #", t, ":");
     solve();
   }
 }
 
-void init() {
-  
-}
-
 void solve() {
-  
+  rdi(N, K);
+  rdvin(A, N);
+
+  if (K >= 3) {
+    cout << 0 << nl;
+    return;
+  }
+
+  sort(all(A));
+
+  int ans = A[0];
+
+  for (int i = 0; i < N; i++) {
+    for (int j = i + 1; j < N; j++) {
+      if (K == 1) {
+        ans = min(ans, abs(A[i] - A[j]));
+      } else {
+        int r = abs(A[i] - A[j]);
+        ans = min(r, ans);
+        auto it = upper_bound(all(A), r);
+        if (it != A.end()) {
+          ans = min(ans, abs(r - *it));
+        }
+        if (it != A.begin()) {
+          it--;
+          ans = min(ans, abs(r - *it));
+        }
+      }
+    }
+  }
+  cout << ans << nl;
 }

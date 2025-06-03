@@ -1,11 +1,11 @@
-// #define testcases
+
+#define testcases
 
 #include <bits/stdc++.h>
 using namespace std;
 
-#define int int64_t
 const string name = ""; // for usaco
-
+#define int int64_t
 #define all(x) begin(x), end(x)
 #define pb push_back
 #define sz(x) (int)(x).size()
@@ -50,7 +50,6 @@ template<typename... Args> void __read(Args&&... args) { (cin >> ... >> args); }
 #define rdvcn(var, n) vc var(n); for (auto & i : var) cin >> i;
 
 void solve();
-void init();
 
 signed main() {
   cin.tie(0)->sync_with_stdio(0);
@@ -65,17 +64,41 @@ signed main() {
 #ifdef testcases
   cin >> tc;
 #endif
-  init();
   for (int t = 1; t <= tc; t++) {
     dbg("Case #", t, ":");
     solve();
   }
 }
 
-void init() {
-  
-}
-
 void solve() {
-  
+  rdi(N);
+  rdvcn(a, N);
+  int n = 0, r = 0;
+  bool gn = false, gr = false;
+  vb ans(N);
+
+  rep(i, 0, N) {
+    char c = a[i];
+    if (c == ')') {
+      if (n) n--, ans[i] = true;
+      else r++, ans[i] = false;
+    } else {
+      if (r) r--, ans[i] = false;
+      else n++, ans[i] = true;
+    }
+    if (n) gn = true;
+    if (r) gr = true;
+  }
+
+  if (n || r) {
+    cout << -1 << nl;
+    return;
+  }
+
+  cout << (gn + gr) << nl;
+  for (bool b : ans) {
+    if (b || !gn) cout << 1 << " ";
+    else cout << 2 << " ";
+  }
+  cout << nl;
 }

@@ -1,8 +1,8 @@
-// #define testcases
 
 #include <bits/stdc++.h>
 using namespace std;
 
+#define testcases
 #define int int64_t
 const string name = ""; // for usaco
 
@@ -50,7 +50,6 @@ template<typename... Args> void __read(Args&&... args) { (cin >> ... >> args); }
 #define rdvcn(var, n) vc var(n); for (auto & i : var) cin >> i;
 
 void solve();
-void init();
 
 signed main() {
   cin.tie(0)->sync_with_stdio(0);
@@ -65,17 +64,51 @@ signed main() {
 #ifdef testcases
   cin >> tc;
 #endif
-  init();
   for (int t = 1; t <= tc; t++) {
     dbg("Case #", t, ":");
     solve();
   }
 }
 
-void init() {
-  
-}
-
 void solve() {
-  
+  rdi(N);
+  rdvin(a, N);
+  rdi(Q);
+
+  vvi bits(N, vi(30));
+  for (int i = N - 1; i >= 0; i--) {
+    for (int j = 0; j < 30; j++) {
+      if ((a[i] & (1 << j)) == 0) {
+        bits[i][j] = 0;
+      } else {
+        bits[i][j] = i < N - 1 ? bits[i+1][j] + 1 : 1; 
+      }
+    }
+  }
+  // dbg(bits);
+
+  auto solve = [&](auto& solve, int l, int mb, int k) -> int {
+    int ans = -1;
+    // dbg(l, mb, k);
+    if (k == 0) return inf;
+    if (mb < 0) return -1;
+    if ((1 << (mb + 1)) <= k) return -1;
+    if (!bits[l][mb]) return solve(solve, l, mb - 1, k);
+    if ((1 << mb) > k) {
+      ans = max(ans, bits[l][mb]);
+    }
+    ans = max(ans, min(bits[l][mb], solve(solve, l, mb - 1, k - (1 << mb))));
+    ans = max(ans, solve(solve, l, mb - 1, k));
+    return ans;
+  };
+
+  rep(q, 0, Q) {
+    rdi(l, k);
+    l--;
+    dbg(l, k);
+    int ans = solve(solve, l, 29, k);
+    dbg(ans);
+    cout << (ans == -1 ? -1 : ans + l) << " ";
+  }
+  cout << nl;
 }
