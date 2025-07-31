@@ -1,4 +1,4 @@
-// #define testcases
+#define testcases
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -108,58 +108,46 @@ signed main() {
 
 void init() {}
 
-const int MAX_PR = 100000;
-bitset<MAX_PR> isprime;
-vi eratosthenesSieve(int lim) {
-  isprime.set();
-  isprime[0] = isprime[1] = 0;
-  for (int i = 4; i < lim; i += 2)
-    isprime[i] = 0;
-  for (int i = 3; i * i < lim; i += 2)
-    if (isprime[i])
-      for (int j = i * i; j < lim; j += i * 2)
-        isprime[j] = 0;
-  vi pr;
-  rep(i, 2, lim) if (isprime[i]) pr.push_back(i);
-  return pr;
-}
-
 void solve() {
   rdi(N);
-  rdvin(a, N);
+  rdvcn(a, N);
 
-  int no = 0;
-  for (int i : a) {
-    if (i == 1) {
-      no++;
-    }
-  }
-  if (no) {
-    cout << N - no << nl;
-    return;
-  }
+  vi c(26);
+  for (char i : a)
+    c[i - 'a']++;
 
-  vi primes = eratosthenesSieve(100000);
+  vc anss(N, 'a' + int(max_element(all(c)) - c.begin()));
+  sort(all(c), greater<int>());
 
-  vvi p(primes.size(), vi(N));
-  vi m(N);
+  int ans = N - c[0];
 
-  for (int i = N - 1; i >= 0; i--) {
-    rep(pi, 0, primes.size()) {
-      p[pi][i] = a[i] % primes[pi] == 0;
-      if (p[pi][i] && i != N - 1) {
-        p[pi][i] += p[pi][i + 1];
+  for (int i = 1; i <= sqrt(N + 1); i++) {
+    vc ns = c;
+    if (N % i != 0)
+      continue;
+    if (26 * i < N)
+      continue;
+
+    int t = 0;
+    int changes = 0;
+    int extra = 0;
+    for (int ci : c) {
+      if (ci == 0)
+        break;
+      if (ci == i)
+        continue;
+      if (ci > i) {
+        extra += ci - i;
+      } else if (extra >= i - ci) {
+        changes += i - ci;
+        extra -= i - ci;
+      } else {
+        extra += ci;
       }
-      m[i] = p[pi][i] == N - i || m[i] == -1 ? -1 : max(m[i], p[pi][i]);
     }
-  }
-  dbg(p);
-
-  int ans = inf;
-  for (int i : m) {
-    if (i != -1)
-      ans = min(ans, i);
+    ans = min(ans, changes + extra / i);
   }
 
-  cout << (ans == inf ? -1 : ans + N - 1) << nl;
+  cout << ans << nl;
+  cout << string(all(anss)) << nl;
 }

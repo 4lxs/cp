@@ -1,4 +1,4 @@
-// #define testcases
+#define testcases
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -108,58 +108,44 @@ signed main() {
 
 void init() {}
 
-const int MAX_PR = 100000;
-bitset<MAX_PR> isprime;
-vi eratosthenesSieve(int lim) {
-  isprime.set();
-  isprime[0] = isprime[1] = 0;
-  for (int i = 4; i < lim; i += 2)
-    isprime[i] = 0;
-  for (int i = 3; i * i < lim; i += 2)
-    if (isprime[i])
-      for (int j = i * i; j < lim; j += i * 2)
-        isprime[j] = 0;
-  vi pr;
-  rep(i, 2, lim) if (isprime[i]) pr.push_back(i);
-  return pr;
-}
-
 void solve() {
   rdi(N);
+
   rdvin(a, N);
 
-  int no = 0;
-  for (int i : a) {
-    if (i == 1) {
-      no++;
-    }
-  }
-  if (no) {
-    cout << N - no << nl;
+  if (count(all(a), 0) == N) {
+    cout << "NO" << nl;
     return;
   }
 
-  vi primes = eratosthenesSieve(100000);
+  vi pos, neg;
+  int mp = 0, mn = 0;
 
-  vvi p(primes.size(), vi(N));
-  vi m(N);
+  cout << "YES" << nl;
 
-  for (int i = N - 1; i >= 0; i--) {
-    rep(pi, 0, primes.size()) {
-      p[pi][i] = a[i] % primes[pi] == 0;
-      if (p[pi][i] && i != N - 1) {
-        p[pi][i] += p[pi][i + 1];
-      }
-      m[i] = p[pi][i] == N - i || m[i] == -1 ? -1 : max(m[i], p[pi][i]);
+  for (int i : a) {
+    mp = max(mp, i);
+    mn = min(mn, i);
+    if (i == 0)
+      cout << i << " ";
+    else if (i > 0)
+      pos.pb(i);
+    else
+      neg.pb(i);
+  }
+
+  int b = mp - mn;
+  int rs = 0;
+  while (!neg.empty() || !pos.empty()) {
+    if (rs > 0) {
+      cout << neg.back() << " ";
+      rs += neg.back();
+      neg.pop_back();
+    } else {
+      cout << pos.back() << " ";
+      rs += pos.back();
+      pos.pop_back();
     }
   }
-  dbg(p);
-
-  int ans = inf;
-  for (int i : m) {
-    if (i != -1)
-      ans = min(ans, i);
-  }
-
-  cout << (ans == inf ? -1 : ans + N - 1) << nl;
+  cout << nl;
 }

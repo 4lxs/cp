@@ -1,4 +1,4 @@
-// #define testcases
+#define testcases
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -106,60 +106,32 @@ signed main() {
   }
 }
 
-void init() {}
+vpii lr(1);
+vi nr(1);
 
-const int MAX_PR = 100000;
-bitset<MAX_PR> isprime;
-vi eratosthenesSieve(int lim) {
-  isprime.set();
-  isprime[0] = isprime[1] = 0;
-  for (int i = 4; i < lim; i += 2)
-    isprime[i] = 0;
-  for (int i = 3; i * i < lim; i += 2)
-    if (isprime[i])
-      for (int j = i * i; j < lim; j += i * 2)
-        isprime[j] = 0;
-  vi pr;
-  rep(i, 2, lim) if (isprime[i]) pr.push_back(i);
-  return pr;
+void init() {
+  int rf = 2;
+  lr.pb({0, 0});
+  nr.pb(1);
+  rep(row, 2, 2024) {
+    rep(i, rf, rf + row) {
+      lr.pb({max(i - row, rf - row + 1), min(i - row + 1, rf - 1)});
+      nr.pb(row);
+    }
+    rf += row;
+  }
 }
 
 void solve() {
   rdi(N);
-  rdvin(a, N);
 
-  int no = 0;
-  for (int i : a) {
-    if (i == 1) {
-      no++;
-    }
-  }
-  if (no) {
-    cout << N - no << nl;
-    return;
+  int l = N, r = N;
+  int ans = 0;
+  for (int row = nr[N]; row >= 1; row--) {
+    ans += (r * (r + 1) * (2 * r + 1) - (l - 1) * l * (2 * (l - 1) + 1)) / 6;
+    l = lr[l].first;
+    r = lr[r].second;
   }
 
-  vi primes = eratosthenesSieve(100000);
-
-  vvi p(primes.size(), vi(N));
-  vi m(N);
-
-  for (int i = N - 1; i >= 0; i--) {
-    rep(pi, 0, primes.size()) {
-      p[pi][i] = a[i] % primes[pi] == 0;
-      if (p[pi][i] && i != N - 1) {
-        p[pi][i] += p[pi][i + 1];
-      }
-      m[i] = p[pi][i] == N - i || m[i] == -1 ? -1 : max(m[i], p[pi][i]);
-    }
-  }
-  dbg(p);
-
-  int ans = inf;
-  for (int i : m) {
-    if (i != -1)
-      ans = min(ans, i);
-  }
-
-  cout << (ans == inf ? -1 : ans + N - 1) << nl;
+  cout << ans << nl;
 }

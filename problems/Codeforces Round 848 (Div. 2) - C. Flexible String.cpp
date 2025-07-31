@@ -1,4 +1,4 @@
-// #define testcases
+#define testcases
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -108,58 +108,43 @@ signed main() {
 
 void init() {}
 
-const int MAX_PR = 100000;
-bitset<MAX_PR> isprime;
-vi eratosthenesSieve(int lim) {
-  isprime.set();
-  isprime[0] = isprime[1] = 0;
-  for (int i = 4; i < lim; i += 2)
-    isprime[i] = 0;
-  for (int i = 3; i * i < lim; i += 2)
-    if (isprime[i])
-      for (int j = i * i; j < lim; j += i * 2)
-        isprime[j] = 0;
-  vi pr;
-  rep(i, 2, lim) if (isprime[i]) pr.push_back(i);
-  return pr;
-}
-
 void solve() {
-  rdi(N);
-  rdvin(a, N);
+  rdi(N, K);
+  rdvcn(a, N);
+  rdvcn(b, N);
 
-  int no = 0;
-  for (int i : a) {
-    if (i == 1) {
-      no++;
-    }
+  set<char> tu;
+  for (char i : a) {
+    tu.insert(i);
   }
-  if (no) {
-    cout << N - no << nl;
-    return;
-  }
+  vc u(all(tu));
 
-  vi primes = eratosthenesSieve(100000);
+  int ans = 0;
 
-  vvi p(primes.size(), vi(N));
-  vi m(N);
-
-  for (int i = N - 1; i >= 0; i--) {
-    rep(pi, 0, primes.size()) {
-      p[pi][i] = a[i] % primes[pi] == 0;
-      if (p[pi][i] && i != N - 1) {
-        p[pi][i] += p[pi][i + 1];
+  dbg(u);
+  rep(k, 0, 1 << u.size()) {
+    if (__builtin_popcount(k) > K)
+      continue;
+    int l = 0;
+    int tot = 0;
+    dbg(k);
+    rep(i, 0, N) {
+      if (a[i] == b[i])
+        continue;
+      auto it = find(all(u), a[i]);
+      dbg(it - u.begin());
+      dbg(1 << (it - u.begin()));
+      dbg((1 << (it - u.begin())) & k);
+      dbg(k);
+      if (((1 << (it - u.begin())) & k) == 0) {
+        dbg(i);
+        tot += (i - l) * (i - l + 1) / 2;
+        l = i + 1;
       }
-      m[i] = p[pi][i] == N - i || m[i] == -1 ? -1 : max(m[i], p[pi][i]);
     }
-  }
-  dbg(p);
+    tot += (N - l) * (N - l + 1) / 2;
 
-  int ans = inf;
-  for (int i : m) {
-    if (i != -1)
-      ans = min(ans, i);
+    ans = max(ans, tot);
   }
-
-  cout << (ans == inf ? -1 : ans + N - 1) << nl;
+  cout << ans << nl;
 }

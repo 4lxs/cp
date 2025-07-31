@@ -108,58 +108,64 @@ signed main() {
 
 void init() {}
 
-const int MAX_PR = 100000;
-bitset<MAX_PR> isprime;
-vi eratosthenesSieve(int lim) {
-  isprime.set();
-  isprime[0] = isprime[1] = 0;
-  for (int i = 4; i < lim; i += 2)
-    isprime[i] = 0;
-  for (int i = 3; i * i < lim; i += 2)
-    if (isprime[i])
-      for (int j = i * i; j < lim; j += i * 2)
-        isprime[j] = 0;
-  vi pr;
-  rep(i, 2, lim) if (isprime[i]) pr.push_back(i);
-  return pr;
-}
+/**
+ * Author: Lukas Polacek
+ * Date: 2009-10-30
+ * License: CC0
+ * Source: folklore/TopCoder
+ * Description: Computes partial sums a[0] + a[1] + ... + a[pos - 1], and
+ * updates single elements a[i], taking the difference between the old and new
+ * value. Time: Both operations are $O(\log N)$. Status: Stress-tested
+ */
+#pragma once
+
+struct FT {
+  vector<ll> s;
+  FT(int n) : s(n) {}
+  void update(int pos, ll dif) { // a[pos] += dif
+    for (; pos < sz(s); pos |= pos + 1)
+      s[pos] += dif;
+  }
+  ll query(int pos) { // sum of values in [0, pos)
+    ll res = 0;
+    for (; pos > 0; pos &= pos - 1)
+      res += s[pos - 1];
+    return res;
+  }
+  int lower_bound(ll sum) { // min pos st sum of [0, pos] >= sum
+    // Returns n if no sum is >= sum, or -1 if empty sum is.
+    if (sum <= 0)
+      return -1;
+    int pos = 0;
+    for (int pw = 1 << 25; pw; pw >>= 1) {
+      if (pos + pw <= sz(s) && s[pos + pw - 1] < sum)
+        pos += pw, sum -= s[pos - 1];
+    }
+    return pos;
+  }
+};
 
 void solve() {
-  rdi(N);
+  rdi(N, Q);
+
   rdvin(a, N);
 
-  int no = 0;
-  for (int i : a) {
-    if (i == 1) {
-      no++;
-    }
-  }
-  if (no) {
-    cout << N - no << nl;
-    return;
+  FT ft(N + 2);
+
+  rep(i, 0, Q) {
+    rdi(l, r);
+    ft.update(l, 1);
+    ft.update(r + 1, -1);
   }
 
-  vi primes = eratosthenesSieve(100000);
+  vi cnts;
+  rep(i, 2, N + 2) { cnts.pb(ft.query(i)); }
+  dbg(a, cnts);
 
-  vvi p(primes.size(), vi(N));
-  vi m(N);
+  sort(all(a));
+  sort(all(cnts));
+  int ans = 0;
+  rep(i, 0, N) { ans += cnts[i] * a[i]; }
 
-  for (int i = N - 1; i >= 0; i--) {
-    rep(pi, 0, primes.size()) {
-      p[pi][i] = a[i] % primes[pi] == 0;
-      if (p[pi][i] && i != N - 1) {
-        p[pi][i] += p[pi][i + 1];
-      }
-      m[i] = p[pi][i] == N - i || m[i] == -1 ? -1 : max(m[i], p[pi][i]);
-    }
-  }
-  dbg(p);
-
-  int ans = inf;
-  for (int i : m) {
-    if (i != -1)
-      ans = min(ans, i);
-  }
-
-  cout << (ans == inf ? -1 : ans + N - 1) << nl;
+  cout << ans << nl;
 }

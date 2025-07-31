@@ -1,4 +1,4 @@
-// #define testcases
+#define testcases
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -108,58 +108,64 @@ signed main() {
 
 void init() {}
 
-const int MAX_PR = 100000;
-bitset<MAX_PR> isprime;
-vi eratosthenesSieve(int lim) {
-  isprime.set();
-  isprime[0] = isprime[1] = 0;
-  for (int i = 4; i < lim; i += 2)
-    isprime[i] = 0;
-  for (int i = 3; i * i < lim; i += 2)
-    if (isprime[i])
-      for (int j = i * i; j < lim; j += i * 2)
-        isprime[j] = 0;
-  vi pr;
-  rep(i, 2, lim) if (isprime[i]) pr.push_back(i);
-  return pr;
-}
+/**
+ * Author: Lukas Polacek
+ * Date: 2009-10-26
+ * License: CC0
+ * Source: folklore
+ * Description: Disjoint-set data structure.
+ * Time: $O(\alpha(N))$
+ */
+#pragma once
+
+struct UF {
+  vi e;
+  UF(int n) : e(n, -1) {}
+  bool sameSet(int a, int b) { return find(a) == find(b); }
+  int size(int x) { return -e[find(x)]; }
+  int find(int x) { return e[x] < 0 ? x : e[x] = find(e[x]); }
+  bool join(int a, int b) {
+    a = find(a), b = find(b);
+    if (a == b)
+      return false;
+    if (e[a] > e[b])
+      swap(a, b);
+    e[a] += e[b];
+    e[b] = a;
+    return true;
+  }
+};
 
 void solve() {
   rdi(N);
   rdvin(a, N);
 
-  int no = 0;
-  for (int i : a) {
-    if (i == 1) {
-      no++;
+  UF dsu(N + 1);
+
+  vvi inc(N + 1);
+  rep(i, 1, N + 1) {
+    dsu.join(i, a[i - 1]);
+    inc[a[i - 1]].pb(i);
+  }
+
+  vb m(N + 1);
+
+  rep(i, 1, N + 1) { m[dsu.find(i)] = true; }
+
+  vb nc = m;
+
+  rep(i, 1, N + 1) {
+    if (inc[i].size() > 1) {
+      nc[dsu.find(i)] = false;
     }
   }
-  if (no) {
-    cout << N - no << nl;
-    return;
-  }
 
-  vi primes = eratosthenesSieve(100000);
-
-  vvi p(primes.size(), vi(N));
-  vi m(N);
-
-  for (int i = N - 1; i >= 0; i--) {
-    rep(pi, 0, primes.size()) {
-      p[pi][i] = a[i] % primes[pi] == 0;
-      if (p[pi][i] && i != N - 1) {
-        p[pi][i] += p[pi][i + 1];
-      }
-      m[i] = p[pi][i] == N - i || m[i] == -1 ? -1 : max(m[i], p[pi][i]);
-    }
-  }
-  dbg(p);
-
-  int ans = inf;
-  for (int i : m) {
-    if (i != -1)
-      ans = min(ans, i);
-  }
-
-  cout << (ans == inf ? -1 : ans + N - 1) << nl;
+  dbg(inc);
+  dbg(nc);
+  dbg(m);
+  int mn = count(all(m), true);
+  int ck = count(all(nc), true);
+  int ne = mn - ck;
+  dbg(mn, ck, ne);
+  cout << (ck > 0 ? 1 : 0) + (ne > 0 ? 1 : 0) << " " << mn << nl;
 }
